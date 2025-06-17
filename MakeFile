@@ -1,0 +1,39 @@
+# Define el entorno virtual y el instalador de paquetes
+PYTHON_ENV ?= venv
+PIP ?= $(PYTHON_ENV)/bin/pip
+
+# Regla por defecto (opcional, pero buena práctica)
+.PHONY: all
+all: install
+
+# Regla para instalar las dependencias
+.PHONY: install
+install: requirements.txt
+	@echo "Creando entorno virtual si no existe..."
+	@python -m venv $(PYTHON_ENV)
+	@echo "Activando entorno virtual e instalando dependencias..."
+	@$(PIP) install -r requirements.txt
+	@echo "Dependencias instaladas correctamente."
+
+# Regla para limpiar el entorno virtual
+.PHONY: clean
+clean:
+	@echo "Eliminando entorno virtual..."
+	@rm -rf $(PYTHON_ENV)
+	@echo "Entorno virtual eliminado."
+
+# Regla para crear el archivo requirements.txt si no existe o actualizarlo
+# Puedes ejecutar 'make update-requirements' para generar/actualizarlo
+.PHONY: update-requirements
+update-requirements:
+	@echo "Generando/actualizando requirements.txt..."
+	@$(PYTHON_ENV)/bin/pip freeze > requirements.txt
+	@echo "requirements.txt actualizado."
+
+# Contenido del archivo requirements.txt (se generará si usas update-requirements)
+# Deberías asegurarte de que este archivo exista en tu proyecto.
+# Si lo creas manualmente, debe contener las siguientes líneas:
+# streamlit
+# joblib
+# scikit-learn
+# pandas
